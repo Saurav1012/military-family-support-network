@@ -1,0 +1,26 @@
+:root{
+  --primary:#355E3B;
+  --secondary:#1E293B;
+  --accent:#D4AF37;
+  --light:#F8F9FA;
+  --danger:#DC3545;
+  --success:#198754;
+}
+
+body{
+  background:#f4f6f9;
+  font-family:Inter,sans-serif;
+}
+
+.card{
+  border:none;
+  border-radius:18px;
+}
+
+.btn{
+  border-radius:10px;
+}
+
+.form-control{
+  border-radius:10px;
+}

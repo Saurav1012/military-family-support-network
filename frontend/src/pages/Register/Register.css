@@ -1,0 +1,24 @@
+.register-card{
+    width:100%;
+    max-width:650px;
+    background:#fff;
+    border-radius:20px;
+    padding:35px;
+    box-shadow:0 15px 40px rgba(0,0,0,.08);
+}
+
+.register-title{
+    color:#355E3B;
+    font-weight:700;
+}
+
+.btn-register{
+    height:55px;
+    font-weight:600;
+}
+
+.form-control,
+.form-select{
+    height:50px;
+    border-radius:10px;
+}
