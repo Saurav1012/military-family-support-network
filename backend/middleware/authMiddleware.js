@@ -20,7 +20,8 @@ export const protect = async (req, res, next) => {
     }
 
     const decoded = jwt.verify(token, process.env.JWT_SECRET);
-
+    
+    // 🚀 Exclude password field security reason ke liye
     const user = await User.findById(decoded.id).select("-password");
 
     if (!user) {
@@ -31,12 +32,16 @@ export const protect = async (req, res, next) => {
     }
 
     req.user = user;
-
     next();
   } catch (error) {
+    console.error(error);
     return res.status(401).json({
       success: false,
       message: "Invalid or expired token.",
     });
   }
 };
+
+// Aliases for compatibility
+export const authMiddleware = protect;
+export default protect;

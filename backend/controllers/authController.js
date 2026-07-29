@@ -141,6 +141,8 @@ export const loginUser = async (req, res) => {
         email: user.email,
         role: user.role,
         approvalStatus: user.approvalStatus,
+        profileImage: user.profileImage,
+        verificationDocument: user.verificationDocument,
       },
     });
   } catch (error) {
