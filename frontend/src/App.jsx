@@ -7,11 +7,16 @@ import Dashboard from "./pages/Dashboard/Dashboard";
 import DashboardLayout from "./layouts/DashboardLayout";
 import ProtectedRoute from "./routes/ProtectedRoute";
 import AuthLayout from "./layouts/AuthLayout";
+import Community from "./pages/Community/Community";
+import Forum from "./pages/Forum/Forum";
+import Resources from "./pages/Resources/Resources";
+import Events from "./pages/Events/Events";
+import Profile from "./pages/Profile/Profile";
+import Chat from "./pages/Chat/Chat";
 
 function App() {
   return (
     <Routes>
-
       {/* Default Route */}
       <Route path="/" element={<Navigate to="/login" replace />} />
 
@@ -31,20 +36,49 @@ function App() {
       >
         <Route path="/dashboard" element={<Dashboard />} />
 
-        <Route path="/community" element={<h2>Community Page</h2>} />
+        <Route path="/community" element={<Community />} />
 
-        <Route path="/forum" element={<h2>Forum Page</h2>} />
+        <Route
+          path="/forum"
+          element={
+            <ProtectedRoute>
+              <Forum />
+            </ProtectedRoute>
+          }
+        />
 
-        <Route path="/resources" element={<h2>Resources Page</h2>} />
+        <Route
+          path="/resources"
+          element={
+            <ProtectedRoute>
+              <Resources />
+            </ProtectedRoute>
+          }
+        />
 
-        <Route path="/events" element={<h2>Events Page</h2>} />
+        <Route
+          path="/chat"
+          element={
+            <ProtectedRoute>
+              <Chat />
+            </ProtectedRoute>
+          }
+        />
 
-        <Route path="/profile" element={<h2>Profile Page</h2>} />
+        <Route path="/events" element={<Events />} />
+
+        <Route
+          path="/profile"
+          element={
+            <ProtectedRoute>
+              <Profile />
+            </ProtectedRoute>
+          }
+        />
       </Route>
 
       {/* 404 */}
       <Route path="*" element={<h2>404 - Page Not Found</h2>} />
-
     </Routes>
   );
 }

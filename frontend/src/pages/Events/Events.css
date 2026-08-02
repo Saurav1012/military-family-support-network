@@ -1,0 +1,217 @@
+@import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap');
+
+:root {
+  --primary-dark: #0f172a;
+  --brand-purple: #6366f1;
+  --brand-purple-dark: #4f46e5;
+  --brand-green: #10b981;
+  --brand-red: #ef4444;
+  --accent-light: #f5f3ff;
+  --card-bg: #ffffff;
+  --text-main: #1e293b;
+  --text-muted: #64748b;
+  --border-color: #e2e8f0;
+  --radius-lg: 16px;
+  --radius-md: 12px;
+  --shadow-subtle: 0 4px 20px -2px rgba(0, 0, 0, 0.05);
+  --shadow-hover: 0 20px 25px -5px rgba(99, 102, 241, 0.12), 0 8px 10px -6px rgba(0, 0, 0, 0.04);
+}
+
+body {
+  font-family: 'Plus Jakarta Sans', sans-serif;
+}
+
+/* Header & Banner */
+.events-wrapper {
+  animation: fadeIn 0.4s ease-out;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(10px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.event-header-title {
+  color: var(--primary-dark);
+  font-weight: 800;
+  letter-spacing: -0.5px;
+}
+
+/* Stat Cards for Overview */
+.stat-card {
+  background: #ffffff;
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-md);
+  padding: 1.25rem;
+  box-shadow: var(--shadow-subtle);
+  transition: transform 0.2s ease;
+}
+
+.stat-card:hover {
+  transform: translateY(-3px);
+}
+
+.stat-icon {
+  width: 48px;
+  height: 48px;
+  border-radius: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.4rem;
+}
+
+/* Custom Add Button */
+.btn-custom-add {
+  background: linear-gradient(135deg, var(--brand-purple) 0%, var(--brand-purple-dark) 100%);
+  color: #ffffff;
+  border: none;
+  font-weight: 600;
+  padding: 0.75rem 1.5rem;
+  border-radius: var(--radius-md);
+  box-shadow: 0 4px 14px rgba(99, 102, 241, 0.35);
+  transition: all 0.3s ease;
+}
+
+.btn-custom-add:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(99, 102, 241, 0.45);
+  color: #ffffff;
+}
+
+/* Filter Card */
+.filter-card {
+  background: #ffffff;
+  border-radius: var(--radius-lg);
+  padding: 1.25rem;
+  border: 1px solid var(--border-color);
+  box-shadow: var(--shadow-subtle);
+}
+
+.custom-input, .custom-select {
+  border: 1px solid var(--border-color) !important;
+  border-radius: var(--radius-md) !important;
+  padding: 0.75rem 1rem !important;
+  font-weight: 500;
+  color: var(--text-main);
+  transition: all 0.2s ease;
+}
+
+.custom-input:focus, .custom-select:focus {
+  border-color: var(--brand-purple) !important;
+  box-shadow: 0 0 0 4px rgba(99, 102, 241, 0.15) !important;
+}
+
+/* Event Cards */
+.modern-event-card {
+  background: var(--card-bg);
+  border-radius: var(--radius-lg) !important;
+  border: 1px solid var(--border-color) !important;
+  box-shadow: var(--shadow-subtle);
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  overflow: hidden;
+}
+
+.modern-event-card:hover {
+  transform: translateY(-6px);
+  box-shadow: var(--shadow-hover);
+  border-color: rgba(99, 102, 241, 0.4) !important;
+}
+
+.event-banner-img {
+  height: 200px;
+  width: 100%;
+  object-fit: cover;
+}
+
+/* Status Badges */
+.badge-status {
+  font-size: 0.75rem;
+  font-weight: 700;
+  padding: 0.35rem 0.85rem;
+  border-radius: 50px;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.badge-upcoming { background: #e0f2fe; color: #0369a1; }
+.badge-live { background: #fef2f2; color: #dc2626; animation: pulse 1.5s infinite; }
+.badge-completed { background: #f1f5f9; color: #64748b; }
+
+@keyframes pulse {
+  0% { opacity: 1; }
+  50% { opacity: 0.6; }
+  100% { opacity: 1; }
+}
+
+/* Info Box Inside Cards */
+.event-info-box {
+  background-color: #f8fafc;
+  border: 1px solid #f1f5f9;
+  border-radius: var(--radius-md);
+  padding: 0.85rem;
+}
+
+.event-info-item {
+  font-size: 0.85rem;
+  color: var(--text-muted);
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  margin-bottom: 0.3rem;
+}
+
+/* RSVP Button */
+.btn-rsvp {
+  border-radius: var(--radius-md);
+  font-weight: 700;
+  padding: 0.6rem 1rem;
+  transition: all 0.2s ease;
+}
+
+.btn-rsvp-active {
+  background-color: var(--brand-green);
+  color: #ffffff;
+  border: none;
+}
+
+.btn-rsvp-active:hover {
+  background-color: #059669;
+  color: #ffffff;
+}
+
+/* Empty State */
+.modern-empty-state {
+  background: #ffffff;
+  border: 2px dashed #cbd5e1;
+  border-radius: var(--radius-lg);
+  padding: 4rem 2rem;
+  text-align: center;
+}
+
+.empty-icon-circle {
+  width: 80px;
+  height: 80px;
+  background-color: var(--accent-light);
+  color: var(--brand-purple);
+  font-size: 2.5rem;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0 auto 1.5rem auto;
+}
+
+/* Custom Modal */
+.custom-glass-modal .modal-content {
+  border-radius: var(--radius-lg);
+  border: none;
+  box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+  overflow: hidden;
+}
+
+.custom-glass-modal .modal-header {
+  background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);
+  color: #ffffff;
+  padding: 1.25rem 1.5rem;
+}

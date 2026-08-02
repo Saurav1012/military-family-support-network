@@ -1,0 +1,182 @@
+@import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap');
+
+:root {
+  --primary-dark: #0f172a;
+  --brand-green: #10b981;
+  --brand-green-dark: #059669;
+  --accent-light: #f0fdf4;
+  --card-bg: #ffffff;
+  --text-main: #1e293b;
+  --text-muted: #64748b;
+  --border-color: #e2e8f0;
+  --radius-lg: 16px;
+  --radius-md: 12px;
+  --radius-sm: 8px;
+  --shadow-subtle: 0 4px 20px -2px rgba(0, 0, 0, 0.05);
+  --shadow-hover: 0 20px 25px -5px rgba(16, 185, 129, 0.1), 0 8px 10px -6px rgba(0, 0, 0, 0.04);
+}
+
+body {
+  font-family: 'Plus Jakarta Sans', sans-serif;
+}
+
+/* Page Container & Header Styling */
+.resources-wrapper {
+  animation: fadeIn 0.4s ease-out;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(10px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.resource-header-title {
+  color: var(--primary-dark);
+  font-weight: 800;
+  letter-spacing: -0.5px;
+}
+
+/* Custom Add Button */
+.btn-custom-add {
+  background: linear-gradient(135deg, var(--brand-green) 0%, var(--brand-green-dark) 100%);
+  color: #ffffff;
+  border: none;
+  font-weight: 600;
+  padding: 0.75rem 1.5rem;
+  border-radius: var(--radius-md);
+  box-shadow: 0 4px 14px rgba(16, 185, 129, 0.35);
+  transition: all 0.3s ease;
+}
+
+.btn-custom-add:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(16, 185, 129, 0.45);
+  color: #ffffff;
+}
+
+/* Filter Section Container */
+.filter-card {
+  background: #ffffff;
+  border-radius: var(--radius-lg);
+  padding: 1.25rem;
+  border: 1px solid var(--border-color);
+  box-shadow: var(--shadow-subtle);
+}
+
+.search-input-group .input-group-text {
+  background-color: transparent;
+  border-right: none;
+  color: var(--brand-green);
+  font-size: 1.1rem;
+}
+
+.custom-input, .custom-select {
+  border: 1px solid var(--border-color) !important;
+  border-radius: var(--radius-md) !important;
+  padding: 0.75rem 1rem !important;
+  font-weight: 500;
+  color: var(--text-main);
+  transition: all 0.2s ease;
+}
+
+.search-input-group .custom-input {
+  border-left: none !important;
+}
+
+.custom-input:focus, .custom-select:focus {
+  border-color: var(--brand-green) !important;
+  box-shadow: 0 0 0 4px rgba(16, 185, 129, 0.15) !important;
+}
+
+/* Modern Card Styling */
+.modern-resource-card {
+  background: var(--card-bg);
+  border-radius: var(--radius-lg) !important;
+  border: 1px solid var(--border-color) !important;
+  box-shadow: var(--shadow-subtle);
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  position: relative;
+  overflow: hidden;
+}
+
+.modern-resource-card:hover {
+  transform: translateY(-6px);
+  box-shadow: var(--shadow-hover);
+  border-color: rgba(16, 185, 129, 0.4) !important;
+}
+
+.card-banner-img {
+  height: 180px;
+  object-fit: cover;
+  border-top-left-radius: var(--radius-lg);
+  border-top-right-radius: var(--radius-lg);
+}
+
+.category-tag {
+  background: var(--accent-light);
+  color: var(--brand-green-dark);
+  font-size: 0.75rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  padding: 0.35rem 0.85rem;
+  border-radius: 50px;
+  display: inline-block;
+}
+
+/* Contact Info Styling */
+.contact-card-box {
+  background-color: #f8fafc;
+  border: 1px solid #f1f5f9;
+  border-radius: var(--radius-md);
+  padding: 0.85rem;
+}
+
+.contact-item {
+  font-size: 0.85rem;
+  color: var(--text-muted);
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  margin-bottom: 0.3rem;
+}
+
+.contact-item:last-child {
+  margin-bottom: 0;
+}
+
+/* Empty State Styling */
+.modern-empty-state {
+  background: #ffffff;
+  border: 2px dashed #cbd5e1;
+  border-radius: var(--radius-lg);
+  padding: 4rem 2rem;
+  text-align: center;
+}
+
+.empty-icon-circle {
+  width: 80px;
+  height: 80px;
+  background-color: var(--accent-light);
+  color: var(--brand-green);
+  font-size: 2.5rem;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0 auto 1.5rem auto;
+}
+
+/* Glassmorphism Modal */
+.custom-glass-modal .modal-content {
+  border-radius: var(--radius-lg);
+  border: none;
+  box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+  overflow: hidden;
+}
+
+.custom-glass-modal .modal-header {
+  background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);
+  color: #ffffff;
+  padding: 1.25rem 1.5rem;
+}

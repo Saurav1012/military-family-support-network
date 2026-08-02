@@ -67,8 +67,8 @@ export const registerUser = async (req, res) => {
       city,
       state,
       militaryIdNumber,
-      approvalStatus: "pending",
-      isVerified: false,
+      approvalStatus: "approved", // Set to "pending" for admin approval workflow
+      isVerified: true,
     });
 
     // Remove password from response for security
@@ -77,7 +77,8 @@ export const registerUser = async (req, res) => {
 
     return res.status(201).json({
       success: true,
-      message: "Registration successful. Waiting for admin approval.",
+      // message: "Registration successful. Waiting for admin approval.",
+      message: "Registration Successful",
       user: userResponse,
     });
   } catch (error) {
@@ -118,12 +119,12 @@ export const loginUser = async (req, res) => {
     }
 
     // Check Approval
-    if (user.approvalStatus !== "approved") {
-      return res.status(403).json({
-        success: false,
-        message: "Your account is waiting for admin approval.",
-      });
-    }
+    // if (user.approvalStatus !== "approved") {
+    //   return res.status(403).json({
+    //     success: false,
+    //     message: "Your account is waiting for admin approval.",
+    //   });
+    // }
 
     // Generate Token
     const token = generateToken(user._id, user.role);

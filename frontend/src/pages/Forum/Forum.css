@@ -1,0 +1,27 @@
+.card {
+  border: none;
+  border-radius: 16px;
+  transition: 0.3s ease;
+}
+
+.card:hover {
+  transform: translateY(-6px);
+  box-shadow: 0 12px 25px rgba(0,0,0,0.15);
+}
+
+.modal {
+  background: rgba(0,0,0,0.5);
+}
+
+.input-group-text {
+  background: #198754;
+  color: white;
+}
+
+.card h5 {
+  font-weight: 700;
+}
+
+.btn {
+  border-radius: 10px;
+}

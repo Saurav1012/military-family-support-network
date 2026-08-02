@@ -5,11 +5,6 @@ import { getDashboardStats } from "../controllers/dashboardController.js";
 
 const router = express.Router();
 
-router.get(
-  "/stats",
-  authMiddleware,
-  roleMiddleware("admin"),
-  getDashboardStats
-);
+router.get("/stats", authMiddleware, getDashboardStats);
 
 export default router;

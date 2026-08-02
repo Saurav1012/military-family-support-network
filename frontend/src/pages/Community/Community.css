@@ -1,0 +1,31 @@
+.card {
+  border: none;
+  border-radius: 18px;
+  transition: .3s;
+}
+
+.card:hover {
+  transform: translateY(-6px);
+  box-shadow: 0 10px 25px rgba(0,0,0,.15);
+}
+
+.modal {
+  background: rgba(0,0,0,.5);
+}
+
+.input-group-text {
+  background: #198754;
+  color: white;
+}
+
+.btn-success {
+  border-radius: 10px;
+}
+
+.card h5 {
+  font-weight: 700;
+}
+
+.badge {
+  font-size: 13px;
+}

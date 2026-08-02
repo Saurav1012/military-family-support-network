@@ -16,7 +16,7 @@ import uploadRoutes from "./routes/uploadRoutes.js";
 import chatRoutes from "./routes/chatRoutes.js";
 import emergencyRoutes from "./routes/emergencyRoutes.js";
 import dashboardRoutes from "./routes/dashboardRoutes.js";
-
+import eventRoutes from "./routes/eventRoutes.js"; // 🟢 Single Event Import
 
 const app = express();
 
@@ -88,6 +88,7 @@ app.use("/api/upload", uploadRoutes);
 app.use("/api/chat", chatRoutes);
 app.use("/api/emergency", emergencyRoutes);
 app.use("/api/dashboard", dashboardRoutes);
+app.use("/api/events", eventRoutes); // 🔴 YAHAN REPEAT FIX HO GAYA - Ab Event Route kaam karega!
 
 /* ===========================
    404 Handler
