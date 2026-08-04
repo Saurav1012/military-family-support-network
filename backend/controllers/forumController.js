@@ -5,13 +5,13 @@ import Forum from "../models/Forum.js";
 ========================================== */
 export const createPost = async (req, res) => {
   try {
-    const { title, content, topic, location } = req.body;
+    const { title, content, topic, category, location } = req.body;
 
     const post = await Forum.create({
       title,
       content,
-      topic,
-      location,
+      topic: topic || category || "General",
+      location: location || "General",
       author: req.user._id,
     });
 
@@ -22,11 +22,7 @@ export const createPost = async (req, res) => {
     });
   } catch (error) {
     console.error(error);
-
-    res.status(500).json({
-      success: false,
-      message: error.message,
-    });
+    res.status(500).json({ success: false, message: error.message });
   }
 };
 
@@ -37,7 +33,7 @@ export const getPosts = async (req, res) => {
   try {
     const posts = await Forum.find()
       .populate("author", "name role city state")
-      .sort({ createdAt: -1 });
+      .sort({ isPinned: -1, createdAt: -1 });
 
     res.status(200).json({
       success: true,
@@ -46,11 +42,44 @@ export const getPosts = async (req, res) => {
     });
   } catch (error) {
     console.error(error);
+    res.status(500).json({ success: false, message: error.message });
+  }
+};
 
-    res.status(500).json({
-      success: false,
-      message: error.message,
+/* ==========================================
+   Add Comment to Post (🟢 NEW)
+========================================== */
+export const addComment = async (req, res) => {
+  try {
+    const { text } = req.body;
+
+    if (!text || !text.trim()) {
+      return res.status(400).json({ success: false, message: "Comment text is required" });
+    }
+
+    const post = await Forum.findById(req.params.id);
+
+    if (!post) {
+      return res.status(404).json({ success: false, message: "Post not found" });
+    }
+
+    const newComment = {
+      user: req.user._id,
+      userName: req.user.name || "Member",
+      text: text.trim(),
+    };
+
+    post.comments.push(newComment);
+    await post.save();
+
+    return res.status(200).json({
+      success: true,
+      message: "Comment added successfully",
+      comments: post.comments,
     });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ success: false, message: error.message });
   }
 };
 
@@ -62,10 +91,7 @@ export const toggleLike = async (req, res) => {
     const post = await Forum.findById(req.params.id);
 
     if (!post) {
-      return res.status(404).json({
-        success: false,
-        message: "Post not found",
-      });
+      return res.status(404).json({ success: false, message: "Post not found" });
     }
 
     const alreadyLiked = post.likes.some(
@@ -76,28 +102,49 @@ export const toggleLike = async (req, res) => {
       post.likes = post.likes.filter(
         (id) => id.toString() !== req.user._id.toString()
       );
-
       await post.save();
 
       return res.status(200).json({
         success: true,
         message: "Post unliked",
+        likesCount: post.likes.length,
       });
     }
 
     post.likes.push(req.user._id);
-
     await post.save();
 
     return res.status(200).json({
       success: true,
       message: "Post liked",
+      likesCount: post.likes.length,
     });
   } catch (error) {
-    res.status(500).json({
-      success: false,
-      message: error.message,
+    res.status(500).json({ success: false, message: error.message });
+  }
+};
+
+/* ==========================================
+   Toggle Pin Post (Admin Only) (🟢 NEW)
+========================================== */
+export const togglePinPost = async (req, res) => {
+  try {
+    const post = await Forum.findById(req.params.id);
+
+    if (!post) {
+      return res.status(404).json({ success: false, message: "Post not found" });
+    }
+
+    post.isPinned = !post.isPinned;
+    await post.save();
+
+    return res.status(200).json({
+      success: true,
+      message: post.isPinned ? "Post pinned" : "Post unpinned",
+      isPinned: post.isPinned,
     });
+  } catch (error) {
+    res.status(500).json({ success: false, message: error.message });
   }
 };
 
@@ -109,23 +156,14 @@ export const deletePost = async (req, res) => {
     const post = await Forum.findById(req.params.id);
 
     if (!post) {
-      return res.status(404).json({
-        success: false,
-        message: "Post not found",
-      });
+      return res.status(404).json({ success: false, message: "Post not found" });
     }
 
-    const isOwner =
-      post.author.toString() === req.user._id.toString();
-
-    const isAdmin =
-      req.user.role === "admin";
+    const isOwner = post.author.toString() === req.user._id.toString();
+    const isAdmin = req.user.role?.toLowerCase() === "admin";
 
     if (!isOwner && !isAdmin) {
-      return res.status(403).json({
-        success: false,
-        message: "Access denied",
-      });
+      return res.status(403).json({ success: false, message: "Access denied" });
     }
 
     await post.deleteOne();
@@ -135,9 +173,6 @@ export const deletePost = async (req, res) => {
       message: "Post deleted successfully",
     });
   } catch (error) {
-    res.status(500).json({
-      success: false,
-      message: error.message,
-    });
+    res.status(500).json({ success: false, message: error.message });
   }
 };

@@ -53,6 +53,21 @@ const userSchema = new mongoose.Schema(
       default: "",
     },
 
+    phone: {
+      type: String,
+      default: "",
+    },
+
+    location: {
+      type: String,
+      default: "",
+    },
+
+    bio: {
+      type: String,
+      default: "",
+    },
+
     approvalStatus: {
       type: String,
       enum: ["pending", "approved", "rejected"],

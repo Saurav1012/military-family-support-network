@@ -4,8 +4,10 @@ import Event from "../models/Event.js";
 export const createEvent = async (req, res) => {
   try {
     const eventData = { ...req.body };
-    if (req.file) {
-      eventData.banner = req.file.path; // Agar file upload use ho raha hai
+    if (req.file?.buffer) {
+      const base64 = req.file.buffer.toString("base64");
+      const mimeType = req.file.mimetype || "image/png";
+      eventData.banner = `data:${mimeType};base64,${base64}`;
     }
 
     const event = await Event.create(eventData);
@@ -29,8 +31,10 @@ export const getEvents = async (req, res) => {
 export const updateEvent = async (req, res) => {
   try {
     const eventData = { ...req.body };
-    if (req.file) {
-      eventData.banner = req.file.path;
+    if (req.file?.buffer) {
+      const base64 = req.file.buffer.toString("base64");
+      const mimeType = req.file.mimetype || "image/png";
+      eventData.banner = `data:${mimeType};base64,${base64}`;
     }
 
     const updated = await Event.findByIdAndUpdate(req.params.id, eventData, {

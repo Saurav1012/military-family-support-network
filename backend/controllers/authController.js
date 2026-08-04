@@ -77,12 +77,11 @@ export const registerUser = async (req, res) => {
 
     return res.status(201).json({
       success: true,
-      // message: "Registration successful. Waiting for admin approval.",
       message: "Registration Successful",
       user: userResponse,
     });
   } catch (error) {
-    console.error(error);
+    console.error("Register Error:", error);
 
     return res.status(500).json({
       success: false,
@@ -118,14 +117,6 @@ export const loginUser = async (req, res) => {
       });
     }
 
-    // Check Approval
-    // if (user.approvalStatus !== "approved") {
-    //   return res.status(403).json({
-    //     success: false,
-    //     message: "Your account is waiting for admin approval.",
-    //   });
-    // }
-
     // Generate Token
     const token = generateToken(user._id, user.role);
 
@@ -144,10 +135,13 @@ export const loginUser = async (req, res) => {
         approvalStatus: user.approvalStatus,
         profileImage: user.profileImage,
         verificationDocument: user.verificationDocument,
+        phone: user.phone,
+        location: user.location,
+        bio: user.bio,
       },
     });
   } catch (error) {
-    console.error(error);
+    console.error("Login Error:", error);
 
     return res.status(500).json({
       success: false,
@@ -161,7 +155,6 @@ export const loginUser = async (req, res) => {
 ========================================== */
 export const getProfile = async (req, res) => {
   try {
-    // req.user comes from your authentication middleware (protect/authMiddleware)
     if (!req.user) {
       return res.status(404).json({
         success: false,
@@ -174,7 +167,56 @@ export const getProfile = async (req, res) => {
       user: req.user,
     });
   } catch (error) {
-    console.error(error);
+    console.error("Get Profile Error:", error);
+
+    return res.status(500).json({
+      success: false,
+      message: "Server Error",
+    });
+  }
+};
+
+/* ==========================================
+   Change Password (NEW ADDED & FIXED)
+========================================== */
+export const changePassword = async (req, res) => {
+  try {
+    const { currentPassword, newPassword } = req.body;
+
+    // 1. Fetch user by ID (auth middleware req.user set karta hai)
+    const user = await User.findById(req.user._id || req.user.id);
+
+    if (!user) {
+      return res.status(404).json({
+        success: false,
+        message: "User not found",
+      });
+    }
+
+    // 2. Check current password
+    const isMatch = await bcrypt.compare(currentPassword, user.password);
+
+    if (!isMatch) {
+      return res.status(400).json({
+        success: false,
+        message: "Current password is incorrect",
+      });
+    }
+
+    // 3. Single Hash New Password
+    const hashedPassword = await bcrypt.hash(newPassword, 10);
+
+    // 4. Update Password cleanly using findByIdAndUpdate
+    await User.findByIdAndUpdate(user._id, {
+      password: hashedPassword,
+    });
+
+    return res.status(200).json({
+      success: true,
+      message: "Password updated successfully!",
+    });
+  } catch (error) {
+    console.error("Change Password Error:", error);
 
     return res.status(500).json({
       success: false,

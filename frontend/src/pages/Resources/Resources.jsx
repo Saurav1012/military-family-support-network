@@ -302,17 +302,31 @@ const Resources = () => {
                       )}
                     </div>
 
-                    {/* PDF Download Button (Visible to ALL users if PDF exists) */}
-                    {item.resourcePdf && (
-                      <a
-                        className="btn btn-outline-primary btn-sm w-100 fw-semibold mt-auto py-2"
-                        href={item.resourcePdf}
-                        target="_blank"
-                        rel="noreferrer"
-                      >
-                        📄 Download PDF
-                      </a>
-                    )}
+                    {/* Attachment Buttons (Visible to ALL users if files exist) */}
+                    <div className="d-flex flex-column gap-2 mt-auto">
+                      {item.resourcePdf && (
+                        <a
+                          className="btn btn-outline-primary btn-sm w-100 fw-semibold py-2"
+                          href={item.resourcePdf}
+                          target="_blank"
+                          rel="noreferrer"
+                          download={item.title ? `${item.title}.pdf` : "resource.pdf"}
+                        >
+                          📄 Download PDF
+                        </a>
+                      )}
+                      {item.resourceImage && (
+                        <a
+                          className="btn btn-outline-success btn-sm w-100 fw-semibold py-2"
+                          href={item.resourceImage}
+                          target="_blank"
+                          rel="noreferrer"
+                          download={item.title ? `${item.title}.jpg` : "resource-image.jpg"}
+                        >
+                          🖼 Open Image
+                        </a>
+                      )}
+                    </div>
                   </div>
 
                   {/* 👤 ADMIN ONLY: Edit & Delete Action Buttons */}

@@ -6,11 +6,15 @@ import {
   deleteEvent,
 } from "../controllers/eventController.js";
 
+import multer from "multer";
 import { protect } from "../middleware/authMiddleware.js";
 import { authorize } from "../middleware/roleMiddleware.js";
-import upload from "../middleware/uploadMiddleware.js"; // Banner upload ke liye agar use kar rahe ho
 
 const router = express.Router();
+const eventUpload = multer({
+  storage: multer.memoryStorage(),
+  limits: { fileSize: 5 * 1024 * 1024 },
+});
 
 /* =========================================================
    Event Routes
@@ -25,7 +29,7 @@ router.post(
   "/",
   protect,
   authorize("admin"),
-  upload.single("banner"),
+  eventUpload.single("banner"),
   createEvent
 );
 
@@ -34,7 +38,7 @@ router.put(
   "/:id",
   protect,
   authorize("admin"),
-  upload.single("banner"),
+  eventUpload.single("banner"),
   updateEvent
 );
 

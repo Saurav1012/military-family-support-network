@@ -1,19 +1,24 @@
 export const roleMiddleware = (...allowedRoles) => {
+  const normalizedAllowedRoles = allowedRoles.map((role) => String(role).trim().toLowerCase());
+
   return (req, res, next) => {
-    if (!req.user || !req.user.role) {
+    const userRole = req.user?.role ? String(req.user.role).trim().toLowerCase() : "";
+
+    if (!req.user || !userRole) {
       return res.status(401).json({
         success: false,
         message: "Unauthorized. User role missing.",
       });
     }
 
-    if (!allowedRoles.includes(req.user.role)) {
+    if (!normalizedAllowedRoles.includes(userRole)) {
       return res.status(403).json({
         success: false,
         message: "Access denied. Insufficient permissions.",
       });
     }
 
+    req.user.role = userRole;
     next();
   };
 };

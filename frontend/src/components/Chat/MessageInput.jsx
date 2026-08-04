@@ -1,66 +1,58 @@
-import { useState, useContext } from "react";
-import socket from "../../services/socket";
-import { AuthContext } from "../../context/AuthContext";
+import { useState, useRef } from "react";
+import { FaPaperclip, FaPaperPlane } from "react-icons/fa";
 
-const MessageInput = ({ onSend, receiverId, typing }) => {
-  const { user } = useContext(AuthContext);
-  const [message, setMessage] = useState("");
+const MessageInput = ({ onSend }) => {
+  const [text, setText] = useState("");
+  const [file, setFile] = useState(null);
+  const fileInputRef = useRef(null);
 
-  const userId = user?._id || user?.id;
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    if (!text.trim() && !file) return;
 
-  const handleChange = (e) => {
-    setMessage(e.target.value);
-
-    // Emit typing event to backend/receiver
-    if (receiverId) {
-      socket.emit("typing", {
-        senderId: userId,
-        receiverId,
-      });
-    }
-  };
-
-  const handleSend = (e) => {
-    e?.preventDefault();
-    if (!message.trim()) return;
-
-    onSend(message);
-
-    // Stop typing event emit on send
-    if (receiverId) {
-      socket.emit("stop-typing", {
-        senderId: userId,
-        receiverId,
-      });
-    }
-
-    setMessage("");
+    onSend({ text, file });
+    setText("");
+    setFile(null);
+    if (fileInputRef.current) fileInputRef.current.value = "";
   };
 
   return (
-    <div className="mt-3">
-      {/* Step 8: Show Typing Status above input */}
-      {typing && (
-        <div className="mb-1 ms-1">
-          <small className="text-success fw-semibold">Typing...</small>
+    <form className="card-footer bg-white border-top p-2" onSubmit={handleSubmit}>
+      {file && (
+        <div className="d-flex align-items-center justify-content-between bg-light p-1 px-2 mb-2 rounded border small">
+          <span className="text-truncate">📎 {file.name}</span>
+          <button type="button" className="btn-close btn-sm" onClick={() => setFile(null)}></button>
         </div>
       )}
 
-      {/* Step 7: Input with Socket Typing Emitter */}
-      <form onSubmit={handleSend} className="input-group">
+      <div className="input-group">
+        <input
+          type="file"
+          ref={fileInputRef}
+          className="d-none"
+          onChange={(e) => setFile(e.target.files[0])}
+        />
+        <button
+          type="button"
+          className="btn btn-outline-secondary"
+          onClick={() => fileInputRef.current?.click()}
+        >
+          <FaPaperclip />
+        </button>
+
         <input
           type="text"
           className="form-control"
-          placeholder="Type message..."
-          value={message}
-          onChange={handleChange}
+          placeholder="Type a message..."
+          value={text}
+          onChange={(e) => setText(e.target.value)}
         />
 
-        <button type="submit" className="btn btn-primary">
-          Send
+        <button type="submit" className="btn btn-success px-4">
+          <FaPaperPlane />
         </button>
-      </form>
-    </div>
+      </div>
+    </form>
   );
 };
 

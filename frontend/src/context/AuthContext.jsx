@@ -4,7 +4,7 @@ import socket from "../services/socket";
 export const AuthContext = createContext();
 
 export const AuthProvider = ({ children }) => {
-  const [user, setUser] = useState(
+  const [user, setUserState] = useState(
     JSON.parse(localStorage.getItem("user")) || null
   );
 
@@ -12,14 +12,20 @@ export const AuthProvider = ({ children }) => {
     localStorage.getItem("token") || null
   );
 
-  // Login function with socket connection & join event
+  const setUser = (userData) => {
+    setUserState(userData);
+    if (userData) {
+      localStorage.setItem("user", JSON.stringify(userData));
+    } else {
+      localStorage.removeItem("user");
+    }
+  };
+
   const login = (userData, tokenData) => {
     setUser(userData);
     setToken(tokenData);
-    localStorage.setItem("user", JSON.stringify(userData));
     localStorage.setItem("token", tokenData);
 
-    // Socket Connection & Join Event Trigger
     if (userData) {
       if (!socket.connected) {
         socket.connect();
@@ -29,13 +35,10 @@ export const AuthProvider = ({ children }) => {
     }
   };
 
-  // Logout function with socket disconnect
   const logout = () => {
     setUser(null);
     setToken(null);
     localStorage.clear();
-
-    // Disconnect active socket session
     socket.disconnect();
   };
 
@@ -46,6 +49,7 @@ export const AuthProvider = ({ children }) => {
         token,
         login,
         logout,
+        setUser,
       }}
     >
       {children}
