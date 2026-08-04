@@ -1,4 +1,4 @@
-import Community from "../models/Community.js";
+import Community from "../models/community.js";
 
 /* ==========================
    Create Community
