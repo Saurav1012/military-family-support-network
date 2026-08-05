@@ -16,22 +16,23 @@ connectDB();
 
 const PORT = process.env.PORT || 5000;
 
-// Dynamic Allowed Origins for Express & Socket.io
-const allowedOrigins = [
-  process.env.CLIENT_URL,
-  "https://military-family-support.vercel.app",
-  "http://localhost:5173",
-  "http://localhost:3000",
-].filter(Boolean); // Filters out undefined values if CLIENT_URL isn't set yet
+// Dynamic CORS check function (Allows localhost, main Vercel domain, and all Vercel Preview domains)
+const isAllowedOrigin = (origin) => {
+  if (!origin) return true; // Allow non-browser requests (Postman, mobile apps)
+  if (origin.startsWith("http://localhost:")) return true;
+  if (origin.endsWith(".vercel.app")) return true; // Matches all *.vercel.app URLs
+  if (process.env.CLIENT_URL && origin === process.env.CLIENT_URL) return true;
+  return false;
+};
 
 // Apply CORS to Express app
 app.use(
   cors({
     origin: function (origin, callback) {
-      if (!origin || allowedOrigins.includes(origin)) {
+      if (isAllowedOrigin(origin)) {
         callback(null, true);
       } else {
-        callback(null, true); // Fallback to allow connection
+        callback(new Error("CORS policy violation"));
       }
     },
     credentials: true,
@@ -42,10 +43,16 @@ app.use(
 
 const server = http.createServer(app);
 
-// Setup Socket.io with dynamic CORS origins
+// Setup Socket.io with dynamic origin check
 const io = new Server(server, {
   cors: {
-    origin: allowedOrigins,
+    origin: function (origin, callback) {
+      if (isAllowedOrigin(origin)) {
+        callback(null, true);
+      } else {
+        callback(new Error("CORS policy violation"));
+      }
+    },
     credentials: true,
   },
 });
