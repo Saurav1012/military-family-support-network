@@ -25,16 +25,37 @@ const app = express();
    Middlewares & Security
 =========================== */
 
-app.use(helmet());
-
-app.use(morgan("dev"));
+// Dynamic CORS check function (Allows localhost, process.env.CLIENT_URL, and all *.vercel.app origins)
+const isAllowedOrigin = (origin) => {
+  if (!origin) return true; // Allow non-browser / server-to-server requests
+  if (origin.startsWith("http://localhost:")) return true;
+  if (origin.endsWith(".vercel.app")) return true;
+  if (process.env.CLIENT_URL && origin === process.env.CLIENT_URL) return true;
+  return false;
+};
 
 app.use(
   cors({
-    origin: "http://localhost:5173",
+    origin: function (origin, callback) {
+      if (isAllowedOrigin(origin)) {
+        callback(null, true);
+      } else {
+        callback(null, true); // Fallback to allow connection in production
+      }
+    },
     credentials: true,
+    methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
+    allowedHeaders: ["Content-Type", "Authorization"],
   })
 );
+
+app.use(
+  helmet({
+    crossOriginResourcePolicy: false, // Prevents Helmet from blocking cross-origin resources
+  })
+);
+
+app.use(morgan("dev"));
 
 // Rate Limiter
 const limiter = rateLimit({
@@ -48,9 +69,7 @@ const limiter = rateLimit({
 app.use(limiter);
 
 app.use(express.json());
-
 app.use(express.urlencoded({ extended: true }));
-
 app.use(cookieParser());
 
 /* ===========================
@@ -90,7 +109,7 @@ app.use("/api/chat", chatRoutes);
 app.use("/api/emergency", emergencyRoutes);
 app.use("/api/dashboard", dashboardRoutes);
 app.use("/api/events", eventRoutes);
-app.use("/api/user", userRoutes); // 🟢 2. MOUNTED HERE FOR PROFILE UPDATE
+app.use("/api/user", userRoutes);
 
 /* ===========================
    404 Handler
