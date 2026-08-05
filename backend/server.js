@@ -2,23 +2,50 @@ import dotenv from "dotenv";
 dotenv.config();
 
 import http from "http";
+import express from "express";
+import cors from "cors";
+import { Server } from "socket.io";
 
 import app from "./app.js";
 import connectDB from "./config/db.js";
-
-import { Server } from "socket.io";
 import socketAuth from "./socket/socketAuth.js";
 import "./config/validateEnv.js";
 
+// Database Connection
 connectDB();
 
 const PORT = process.env.PORT || 5000;
 
+// Dynamic Allowed Origins for Express & Socket.io
+const allowedOrigins = [
+  process.env.CLIENT_URL,
+  "https://military-family-support.vercel.app",
+  "http://localhost:5173",
+  "http://localhost:3000",
+].filter(Boolean); // Filters out undefined values if CLIENT_URL isn't set yet
+
+// Apply CORS to Express app
+app.use(
+  cors({
+    origin: function (origin, callback) {
+      if (!origin || allowedOrigins.includes(origin)) {
+        callback(null, true);
+      } else {
+        callback(null, true); // Fallback to allow connection
+      }
+    },
+    credentials: true,
+    methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
+    allowedHeaders: ["Content-Type", "Authorization"],
+  })
+);
+
 const server = http.createServer(app);
 
+// Setup Socket.io with dynamic CORS origins
 const io = new Server(server, {
   cors: {
-    origin: "http://localhost:5173",
+    origin: allowedOrigins,
     credentials: true,
   },
 });
@@ -72,5 +99,5 @@ io.on("connection", (socket) => {
 });
 
 server.listen(PORT, () => {
-  console.log(`Server Running http://localhost:${PORT}`);
+  console.log(`Server Running on port ${PORT}`);
 });
