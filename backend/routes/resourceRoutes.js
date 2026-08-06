@@ -27,8 +27,8 @@ const resourceUpload = multer({
    Resource Routes
 ========================================================= */
 
-// Get all resources (Any authenticated user)
-router.get("/", protect, getResources);
+// Get all resources (Anyone can view resources)
+router.get("/", getResources);
 
 // Create resource (Admin only + Validation)
 router.post(

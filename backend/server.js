@@ -16,16 +16,16 @@ connectDB();
 
 const PORT = process.env.PORT || 5000;
 
-// Dynamic CORS check function (Allows localhost, main Vercel domain, and all Vercel Preview domains)
+// Dynamic CORS check function
 const isAllowedOrigin = (origin) => {
-  if (!origin) return true; // Allow non-browser requests (Postman, mobile apps)
+  if (!origin) return true; 
   if (origin.startsWith("http://localhost:")) return true;
-  if (origin.endsWith(".vercel.app")) return true; // Matches all *.vercel.app URLs
+  if (origin.endsWith(".vercel.app")) return true; 
   if (process.env.CLIENT_URL && origin === process.env.CLIENT_URL) return true;
   return false;
 };
 
-// Apply CORS to Express app
+// Express App par CORS Config Set karein
 app.use(
   cors({
     origin: function (origin, callback) {
@@ -43,7 +43,7 @@ app.use(
 
 const server = http.createServer(app);
 
-// Setup Socket.io with dynamic origin check
+// Setup Socket.io
 const io = new Server(server, {
   cors: {
     origin: function (origin, callback) {
@@ -74,7 +74,6 @@ io.on("connection", (socket) => {
     console.log("Online Users :", onlineUsers.size);
   });
 
-  // Typing event
   socket.on("typing", (data) => {
     const receiverSocket = onlineUsers.get(data.receiverId);
     if (receiverSocket) {
@@ -84,7 +83,6 @@ io.on("connection", (socket) => {
     }
   });
 
-  // Stop typing event
   socket.on("stop-typing", (data) => {
     const receiverSocket = onlineUsers.get(data.receiverId);
     if (receiverSocket) {
@@ -96,7 +94,6 @@ io.on("connection", (socket) => {
 
   socket.on("disconnect", () => {
     console.log("Disconnected :", socket.id);
-
     for (const [userId, socketId] of onlineUsers) {
       if (socketId === socket.id) {
         onlineUsers.delete(userId);
