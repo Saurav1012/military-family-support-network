@@ -17,67 +17,29 @@ import Chat from "./pages/Chat/Chat";
 function App() {
   return (
     <Routes>
-      {/* Default Route */}
+      {/* Default Redirect to Login */}
       <Route path="/" element={<Navigate to="/login" replace />} />
 
-      {/* Authentication Routes */}
+      {/* Public Authentication Routes */}
       <Route element={<AuthLayout />}>
         <Route path="/login" element={<Login />} />
         <Route path="/register" element={<Register />} />
       </Route>
 
-      {/* Protected Routes */}
-      <Route
-        element={
-          <ProtectedRoute>
-            <DashboardLayout />
-          </ProtectedRoute>
-        }
-      >
-        <Route path="/dashboard" element={<Dashboard />} />
-
-        <Route path="/community" element={<Community />} />
-
-        <Route
-          path="/forum"
-          element={
-            <ProtectedRoute>
-              <Forum />
-            </ProtectedRoute>
-          }
-        />
-
-        <Route
-          path="/resources"
-          element={
-            <ProtectedRoute>
-              <Resources />
-            </ProtectedRoute>
-          }
-        />
-
-        <Route
-          path="/chat"
-          element={
-            <ProtectedRoute>
-              <Chat />
-            </ProtectedRoute>
-          }
-        />
-
-        <Route path="/events" element={<Events />} />
-
-        <Route
-          path="/profile"
-          element={
-            <ProtectedRoute>
-              <Profile />
-            </ProtectedRoute>
-          }
-        />
+      {/* 🔒 STRICTLY PROTECTED ROUTES (Sirf Valid Token Par Hi Khulenge) */}
+      <Route element={<ProtectedRoute />}>
+        <Route element={<DashboardLayout />}>
+          <Route path="/dashboard" element={<Dashboard />} />
+          <Route path="/community" element={<Community />} />
+          <Route path="/forum" element={<Forum />} />
+          <Route path="/resources" element={<Resources />} />
+          <Route path="/chat" element={<Chat />} />
+          <Route path="/events" element={<Events />} />
+          <Route path="/profile" element={<Profile />} />
+        </Route>
       </Route>
 
-      {/* 404 */}
+      {/* Fallback 404 Route */}
       <Route path="*" element={<h2>404 - Page Not Found</h2>} />
     </Routes>
   );
